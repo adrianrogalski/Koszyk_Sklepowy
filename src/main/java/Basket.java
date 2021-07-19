@@ -1,8 +1,11 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.util.*;
 
 public class Basket {
-    private final Map<String, Integer> productsNumber = new HashMap<>();
+    private Map<String, Integer> productsNumber = new HashMap<>();
+    private Map<String, Double> productsPrices = new HashMap<>();
 
     public void add(Product product, int numberOfProductsPrim) {
         // Dodaje produkt to tablicy z cenami i tablicy z jego iloscia
@@ -13,6 +16,7 @@ public class Basket {
         }
         else {
             productsNumber.put(product.getName(), numberOfProducts);
+            productsPrices.put(product.getName(), product.getPrice());
         }
     }
 
@@ -30,10 +34,21 @@ public class Basket {
         }
     }
 
+    public String overallPrice() {
+        BigDecimal summary = new BigDecimal(0);
+        for (String productName : productsNumber.keySet()) {
+            BigDecimal numberOfProducts = new BigDecimal(productsNumber.get(productName));
+            BigDecimal priceOfProducts = new BigDecimal(productsPrices.get(productName));
+            summary = summary.add(priceOfProducts.multiply(numberOfProducts));
+        }
+        return "Suma: " + summary.setScale(2, RoundingMode.HALF_UP);
+    }
+
     private boolean isReadyToDelete(Product product, Integer numberOfProducts) {
         boolean deleteProduct = (productsNumber.get(product.getName()) - numberOfProducts) <= Integer.valueOf(0);
         if (deleteProduct) {
             productsNumber.remove(product.getName());
+            productsPrices.remove(product.getName());
             return true;
         }
         return false;

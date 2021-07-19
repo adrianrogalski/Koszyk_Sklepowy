@@ -1,6 +1,6 @@
 public class ShopApp {
     public static void main(String[] args) {
-        Product carrot = new Product("carrot", 3.21);
+        Product carrot = new Product("carrot", 30.21);
         Product apple = new Product("apple", 2.51);
         Basket basket = new Basket();
         basket.add(carrot,3);
@@ -12,6 +12,6 @@ public class ShopApp {
         System.out.println(basket);
         basket.remove(apple, 10);
         System.out.println(basket);
-
+        System.out.println(basket.overallPrice());
     }
 }
